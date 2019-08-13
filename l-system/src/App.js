@@ -11,7 +11,7 @@ function App() {
     key: "1",
     rule: "11"
   }
-  const r3 ={
+  const r3 = {
     key: "[",
     rule: "["
   }
@@ -22,6 +22,8 @@ function App() {
 
   const rules = [ r1, r2, r3, r4 ]
 
+  const [iterations, setIterations] = useState([axiom])
+
   /*const ret = () => {
     return (
       axiom.map(letter => 
@@ -29,32 +31,33 @@ function App() {
     )
   }*/
 
-  console.log([...axiom]
-    .map(l => rules
-      .filter(k => k.key === l)
-      .map(r => r.rule))
-    .reduce((a,c) => a + c))
+  const replace = (word) => [...word]
+    .map(letter => rules
+      .filter(k => k.key === letter)
+      .map(r => r.rule)[0])
+      .reduce((a,c) => a.concat(c))
+
+
+
+  const newIteration = () => 
+    setIterations(iterations
+      .concat(
+        replace(iterations[iterations.length - 1])))
+
+  const rows = () => 
+    iterations.map((r, i) => <Row key={i} text={r}/>)
   
-  const replacer = (acc, curr) => acc.concat([...curr]
-    .map(l => rules
-      .filter(k => k.key === l)
-      .map(r => r.rule)))
-
-
-  console.log('replacer:',[...axiom].reduce(replacer))
-
-  /*console.log([...axiom]
-    .map(l => rules
-      .filter(k => k.key === l)
-      ))
-*/
-  //console.log(rules.filter(rule => rule.find(_ => true) === 0));
-
-
   return (
    <div>
-     <p>f</p>
+     <button onClick={() => newIteration()}>uusi</button>
+     {rows()}
    </div>
+  )
+}
+
+const Row = ({text}) => {
+  return (
+    <p>{text}</p>
   )
 }
 
