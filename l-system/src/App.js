@@ -2,8 +2,6 @@ import React, {useState} from 'react';
 import './App.css';
 
 function App() {
-  const axiom = "0"
-  
 
   const rules = [
     {
@@ -34,6 +32,7 @@ function App() {
   }
 
   console.log(system.axiom, system.rules, system.alphabet)
+  console.log(system.alphabet)
   //console.log(system.rules[1].key)
   //console.log(system.rules.forEach(i => console.log(i.rule)))
   /*console.log(system.rules
@@ -45,14 +44,9 @@ function App() {
     //.reduce((a, c) => a.concat(c))
     )
 */
-  const [iterations, setIterations] = useState([axiom])
+  const [iterations, setIterations] = useState([system.axiom])
 
-  /*const ret = () => {
-    return (
-      axiom.map(letter => 
-      rules.filter(rule => rule.find(_ => true) === letter))
-    )
-  }*/
+  
 
   const replace = (word) => [...word]
     .map(letter => rules
@@ -67,16 +61,34 @@ function App() {
       .concat(
         replace(iterations[iterations.length - 1])))
 
-  const rows = () => 
-      iterations.map((r, i) => <Row key={i} text={r}/>)
+  const rows = (props) => 
+      props.map((r, i) => <Row key={i} text={r}/>)
     
+  const presenter = () => 
+      system.rules.map(pair => <Trow pair={pair} key={pair.key}/>)
   
   return (
    <div>
      <p>Aksiooma: {system.axiom}</p>
-     <button onClick={() => newIteration()}>uusi</button>
-     {rows()}
+     <table>
+      <tbody>
+        <tr><th>avain</th><th>sääntö</th></tr>
+        {presenter()}
+      </tbody>
+    </table>
+    <p>Aakkoset: {system.alphabet.sort().reduce((a, c) => a.concat(", ", c))}</p>
+    <button onClick={() => newIteration()}>uusi</button>
+    {rows(iterations)}
    </div>
+  )
+}
+
+const Trow = ({pair}) => {
+  return (
+    <tr>
+      <td>{pair.key}</td>
+      <td>{pair.rule}</td>
+    </tr>
   )
 }
 
