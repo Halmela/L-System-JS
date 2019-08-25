@@ -1,5 +1,5 @@
 import React from 'react'
-const Content = ({system, iterations, newIteration} ) => {
+const Content = ({axiom, handleAxiomChange, system, newSystem, handleSystemChange, handleNewRuleChange, iterations, newIteration} ) => {
   console.log('säännöt contentissa', system.rules)
 
   const rows = (props) =>  {
@@ -14,7 +14,7 @@ const Content = ({system, iterations, newIteration} ) => {
       props.map(pair => <Trow pair={pair} key={pair.key}/>)
     )
   }
-
+/*
   const Trow = ({pair}) => {
     return (
       <tr>
@@ -23,41 +23,109 @@ const Content = ({system, iterations, newIteration} ) => {
       </tr>
     )
   }
+*/
+
+  const Forms = ({system}) => {
+    return (
+      <table>
+        <tbody>
+          <tr><th>avain</th><th>sääntö</th></tr>
+          {presenter(system.rules)}
+        </tbody>
+      </table>
+    )
+  }
+
+  const Trow = ({pair}) => {
+    return (
+      <tr>
+        <td>{pair.key}</td>
+        <td>
+          <RuleForm pair={pair}/>
+        </td>
+      </tr>
+    )
+  }
+
   
   const Row = ({text}) => {
     return (
       <p>{text}</p>
     )
   }
+
   
-  /*const Row = ({text}) => {
+
+
+  const RuleForm = ({pair}) => {
+    console.log(pair)
+    //{ChangeRule({key: pair.key, rule: value})}
+
     return (
-      <p>{text}</p>
-      <form onSubmit={newIteration}>
-    <div>Sääntö:
-      <input value={newNumber} onChange={handleNumberChange} /></div>
-    <div>
-      <button type="submit">lisää</button></div>
-    </form>
+      <form id={pair.key} onSubmit={ChangeRule}>
+        <div>
+          <input name="rule" value={pair.rule} onChange={handleNewRuleChange} />
+          <button type="submit">jeah</button>
+        </div>
+      </form>
     )
-  }*/
-  
-  //const Tabler = ({json}) => 
+  }
+
+  const klikTest = (event) => {
+    event.preventDefault()
+    console.log('lol: ', event.target)
+    
+  }
+
+  const ChangeAxiom = (event) => {
+    event.preventDefault()
+    console.log('CA props', axiom)
+    newSystem(axiom, system.rules)
+  }
+
+  const ChangeRule = (event) => {
+    event.preventDefault()
+    console.log(event.target.id)
+    console.log('CR', document.getElementById(event.target.id).elements["rule"].value)
+    
+    /*const nu = {
+      axiom: system.axiom,
+      rules: system.rules
+        .map(p => p.key === event.target.id
+            ? {key: p.key, rule: props.rule}
+            : {key: p.key, rule: p.rule}
+          )
+    }
+    console.log('uus:', nu)
+    newSystem(nu)*/
+  }
+
+  const testi = {
+    key: '1',
+    rule: '2'
+  }
 
   return (
-    <div>
-    <p>Aksiooma: {system.axiom}</p>
-    <table>
-     <tbody>
-       <tr><th>avain</th><th>sääntö</th></tr>
-       {presenter(system.rules)}
-     </tbody>
-   </table>
+    <div>Aksiooma: 
+      <form onSubmit={ChangeAxiom}>
+        <input value={axiom} onChange={handleAxiomChange}/>
+      </form>
+    
+   
    <p>Aakkoset: {system.alphabet.sort().reduce((a, c) => a.concat(", ", c))}</p>
    <button onClick={() => newIteration()}>uusi</button>
+
+   <table>
+        <tbody>
+          <tr><th>avain</th><th>sääntö</th></tr>
+          {presenter(system.rules)}
+        </tbody>
+      </table>
+
    {rows(iterations)}
   </div>    
   )
 }
+ //<Forms system={system}/>
 
 export default Content
