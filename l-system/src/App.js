@@ -35,8 +35,10 @@ function App() {
     alphabet: alphabet(rules)
   }
 
-  const [system, setSystem] = useState([lsystem])
-  const [iterations, setIterations] = useState([system.axiom])
+  const [system, setSystem] = useState(lsystem)
+  const [iterations, setIterations] = useState([lsystem.axiom])
+  console.log({system})
+  console.log({iterations})
 
 
   const replace = (word) => [...word]
