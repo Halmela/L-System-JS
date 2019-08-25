@@ -1,7 +1,14 @@
 import React, {useState} from 'react';
 import './App.css';
+import Content from './components/Content'
 
 function App() {
+  
+  const alphabet = (list) => (
+    list
+      .map(set => set.rule.split(''))
+      .reduce((a, c) => a.concat(c))
+      .filter((letter, i, arr) => arr.indexOf(letter) === (i)))
 
   const rules = [
     {
@@ -22,31 +29,15 @@ function App() {
     }
   ]
 
-  const system = {
+  const lsystem = {
     axiom: "0",
     rules: rules,
-    alphabet: rules
-      .map(set => set.rule.split(''))
-      .reduce((a, c) => a.concat(c))
-      .filter((letter, i, arr) => arr.indexOf(letter) === (i))
+    alphabet: alphabet(rules)
   }
 
-  console.log(system.axiom, system.rules, system.alphabet)
-  console.log(system.alphabet)
-  //console.log(system.rules[1].key)
-  //console.log(system.rules.forEach(i => console.log(i.rule)))
-  /*console.log(system.rules
-    .map(set => set.rule.split(''))
-    .reduce((a, c) => a.concat(c))
-    .filter((letter, i, arr) => arr.indexOf(letter) === (i))
-    
-    
-    //.reduce((a, c) => a.concat(c))
-    )
-*/
+  const [system, setSystem] = useState([lsystem])
   const [iterations, setIterations] = useState([system.axiom])
 
-  
 
   const replace = (word) => [...word]
     .map(letter => rules
@@ -55,50 +46,22 @@ function App() {
       .reduce((a,c) => a.concat(c))
 
 
-
   const newIteration = () => 
     setIterations(iterations
       .concat(
         replace(iterations[iterations.length - 1])))
 
-  const rows = (props) => 
-      props.map((r, i) => <Row key={i} text={r}/>)
-    
-  const presenter = () => 
-      system.rules.map(pair => <Trow pair={pair} key={pair.key}/>)
+  const newSystem = (axiom, rules) => (
+    setSystem({
+      axiom: axiom,
+      rules: rules,
+      alphabet: alphabet(rules)
+    }))
   
   return (
-   <div>
-     <p>Aksiooma: {system.axiom}</p>
-     <table>
-      <tbody>
-        <tr><th>avain</th><th>sääntö</th></tr>
-        {presenter()}
-      </tbody>
-    </table>
-    <p>Aakkoset: {system.alphabet.sort().reduce((a, c) => a.concat(", ", c))}</p>
-    <button onClick={() => newIteration()}>uusi</button>
-    {rows(iterations)}
-   </div>
+   <Content system={system} setSystem={setSystem} newSystem={newSystem} iterations={iterations} setIterations={setIterations} replace={replace} newIteration={newIteration}/>
   )
 }
-
-const Trow = ({pair}) => {
-  return (
-    <tr>
-      <td>{pair.key}</td>
-      <td>{pair.rule}</td>
-    </tr>
-  )
-}
-
-const Row = ({text}) => {
-  return (
-    <p>{text}</p>
-  )
-}
-
-//const Tabler = ({json}) => 
 
 
 export default App;
