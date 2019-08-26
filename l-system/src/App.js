@@ -92,7 +92,7 @@ function App() {
 
   return (
       
-   <Content axiom={axiom} handleAxiomChange={handleAxiomChange} newRule={newRule} handleNewRuleChange={handleNewRuleChange} ruleset={ruleset} system={system} newSystem={newSystem} setSystem={setSystem} handleSystemChange={handleSystemChange} iterations={iterations} setIterations={setIterations} replace={replace} newIteration={newIteration}/>
+   <Content axiom={axiom} handleAxiomChange={handleAxiomChange} ruleset={ruleset} newRule={newRule}  setRuleset={setRuleset} handleRulesetChange={handleRulesetChange} system={system} newSystem={newSystem} setSystem={setSystem} handleSystemChange={handleSystemChange} iterations={iterations} setIterations={setIterations} replace={replace} newIteration={newIteration}/>
 
   )
 }

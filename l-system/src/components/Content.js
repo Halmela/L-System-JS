@@ -1,5 +1,5 @@
 import React from 'react'
-const Content = ({axiom, handleAxiomChange, system, newSystem, handleSystemChange, handleNewRuleChange, iterations, newIteration} ) => {
+const Content = ({axiom, handleAxiomChange, system, newSystem, ruleset, setRuleset, handleNewRuleChange, iterations, newIteration} ) => {
   console.log('säännöt contentissa', system.rules)
 
   const rows = (props) =>  {
@@ -64,11 +64,28 @@ const Content = ({axiom, handleAxiomChange, system, newSystem, handleSystemChang
     return (
       <form id={pair.key} onSubmit={ChangeRule}>
         <div>
-          <input name="rule" value={pair.rule} onChange={handleNewRuleChange} />
-          <button type="submit">jeah</button>
+          <input name={pair.key} value={pair.rule} onChange={ruleHandler} />
         </div>
       </form>
     )
+  }
+
+  const ruleHandler = (event) => {
+    console.log('hRC', ruleset
+      .map(p => p.key === event.target.name
+        ? {key: p.key, rule: event.target.value}
+        : {key: p.key, rule: p.rule}
+      ))
+      console.log('id:', event.target.name)
+      console.log('target', event.target)
+      console.log('value', event.target.value)
+      //console.log('doc', document.getElementById(event.target.name).elements["rule"].)
+
+    setRuleset(ruleset
+      .map(p => p.key === event.target.name
+        ? {key: p.key, rule: event.target.value}
+        : {key: p.key, rule: p.rule}
+      ))
   }
 
   const klikTest = (event) => {
@@ -85,19 +102,24 @@ const Content = ({axiom, handleAxiomChange, system, newSystem, handleSystemChang
 
   const ChangeRule = (event) => {
     event.preventDefault()
-    console.log(event.target.id)
-    console.log('CR', document.getElementById(event.target.id).elements["rule"].value)
+    console.log('CR')
+    console.log('id', event.target.id)
+    console.log('doc', document.getElementById(event.target.id))
+    console.log('???', document.getElementById(event.target.id).elements[0].value)
+  //  console.log('val', event.target)
+    console.log('target', event.target)
+  //  console.log('name', event.target.value)
     
-    /*const nu = {
+    const nu = {
       axiom: system.axiom,
       rules: system.rules
         .map(p => p.key === event.target.id
-            ? {key: p.key, rule: props.rule}
+            ? {key: p.key, rule: document.getElementById(event.target.id).elements[0].value}
             : {key: p.key, rule: p.rule}
           )
     }
     console.log('uus:', nu)
-    newSystem(nu)*/
+    newSystem(nu.axiom, nu.rules)
   }
 
   const testi = {
@@ -118,9 +140,17 @@ const Content = ({axiom, handleAxiomChange, system, newSystem, handleSystemChang
    <table>
         <tbody>
           <tr><th>avain</th><th>sääntö</th></tr>
-          {presenter(system.rules)}
+          {ruleset.map(pair => 
+            <tr>
+              <td>{pair.key}</td>
+              <td><form id={pair.key} onSubmit={ChangeRule}>
+                <div><input name={pair.key} value={pair.rule} onChange={ruleHandler} /></div>
+              </form></td>
+            </tr>)}
         </tbody>
       </table>
+
+    <Forms system={system}/>
 
    {rows(iterations)}
   </div>    
